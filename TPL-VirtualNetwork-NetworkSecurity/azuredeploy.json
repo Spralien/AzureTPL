@@ -59,12 +59,11 @@
     "Vnet-coreSubnet1Prefix": "[parameters('subnet1Prefix')]",
     "Vnet-coreSubnet2Name": "[parameters('subnet2Name')]",
     "Vnet-coreSubnet2Prefix": "[parameters('subnet1Prefix')]",
-    "networkSecurityGroupName": "[parameters('networkSecurityGroupName')]",
-    "apiVersion": "2015-06-15"
+    "networkSecurityGroupName": "[parameters('networkSecurityGroupName')]"
   },
   "resources": [
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('networkSecurityGroupName')]",
       "location": "[resourceGroup().location]",
@@ -91,7 +90,7 @@
       "name": "[variables('vnet-name')]",
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[resourceGroup().location]",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
       ],
