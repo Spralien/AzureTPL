@@ -25,7 +25,7 @@
     },
     "subnet1Name": {
       "type": "string",
-      "defaultValue": "core,
+      "defaultValue": "core",
       "metadata": {
         "description": "Subnet 1 Name"
       }
