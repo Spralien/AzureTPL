@@ -25,7 +25,7 @@
     },
     "subnet1Name": {
       "type": "string",
-      "defaultValue": "Subnet1",
+      "defaultValue": "core,
       "metadata": {
         "description": "Subnet 1 Name"
       }
@@ -39,7 +39,7 @@
     },
     "subnet2Name": {
       "type": "string",
-      "defaultValue": "Subnet2",
+      "defaultValue": "vnet1",
       "metadata": {
         "description": "Subnet 2 Name"
       }
