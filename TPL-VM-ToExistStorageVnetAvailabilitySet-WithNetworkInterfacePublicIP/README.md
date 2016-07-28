@@ -15,7 +15,8 @@ Public IP
 <p>
 VM<br>
 - Network Interface<br>
-- Public IP
+- Public IP<br>
+- 100GB datadisk
 </p>
 <p>
 Depends on existing:<br>
