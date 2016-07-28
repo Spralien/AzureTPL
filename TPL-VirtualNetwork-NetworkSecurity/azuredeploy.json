@@ -25,21 +25,21 @@
     },
     "subnet1Prefix": {
       "type": "string",
-      "defaultValue": "10.2.0.0/24",
+      "defaultValue": "10.0.0.0/24",
       "metadata": {
         "description": "Subnet 1 Prefix"
       }
     },
     "subnet2Name": {
       "type": "string",
-      "defaultValue": "hgdfgd",
+      "defaultValue": "subnet1",
       "metadata": {
         "description": "Subnet 2 Name"
       }
     },
     "subnet2Prefix": {
       "type": "string",
-      "defaultValue": "10.2.1.0/24",
+      "defaultValue": "10.0.1.0/24",
       "metadata": {
         "description": "Subnet 2 Prefix"
       }
