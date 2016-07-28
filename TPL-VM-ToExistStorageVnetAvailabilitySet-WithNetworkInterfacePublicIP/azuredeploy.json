@@ -98,6 +98,7 @@
 
     "nicName": "[concat('nic-', variables('VMName'))]",
     "osDiskVhdUri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', parameters('VMStorageAccountContainerName'), '/', variables('VMname'),'-', uniquestring(resourceGroup().id), '.vhd')]",
+    "datadiskUri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', parameters('VMStorageAccountContainerName'), '/', variables('VMname'),'-datadisk-', uniquestring(resourceGroup().id), '.vhd')]",
 
     "VMImagePublisher": "MicrosoftWindowsServer",
     "VMImageOffer": "WindowsServer"
@@ -177,6 +178,16 @@
               "sku": "[variables('VMWindowsOS')]",
               "version": "latest"
             },
+            "dataDisks": [
+            {
+              "name": "datadisk",
+              "diskSizeGB": 100,
+              "lun": 0,
+              "vhd": {
+                "uri": "[variables('datadiskUri')]"
+              },
+              "createOption": "Empty"
+            }],
             "osDisk": {
               "name": "[variables('VMname')]",
               "vhd": {
