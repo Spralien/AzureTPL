@@ -1,0 +1,190 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VMName": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Name of the VM"
+      }
+    },
+    "VMWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ]
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "VMAdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "VMAdminPassword": {
+      "type": "securestring"
+    },
+
+    "StorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of a existing storage account to save OSdisk on. Need to be in same resource group"
+      }
+    },
+    "VMStorageAccountContainerName": {
+      "type": "string",
+      "defaultValue": "osdisk",
+      "metadata": {
+        "description": "Name of a existing or new storage blob container"
+      }
+    },
+
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "dnsNameForPublicIP": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+      }
+    }
+
+  },
+  "variables": {
+    "VMname": "[parameters('VMName')]",
+    "VMWindowsOS": "[parameters('VMWindowsOSVersion')]",
+    "VMAdminUserName": "[parameters('VMAdminUserName')]",
+    "VMAdminPassword": "[parameters('VMAdminPassword')]",
+    "VMVmSize": "[parameters('vmSize')]",
+
+    "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
+
+    "DNSNameForPublickIP": "[concat(parameters('dnsNameForPublicIP'),uniquestring(resourceGroup().id))]",
+    "publicIPAddressName": "[concat('publickip-', variables('VMName'),uniquestring(resourceGroup().id))]",
+    "publicIPAddressType": "Dynamic",
+
+    "nicName": "[concat('nic-', variables('VMName'))]",
+    "osDiskVhdUri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', parameters('VMStorageAccountContainerName'), '/', variables('VMname'),'-', uniquestring(resourceGroup().id), '.vhd')]",
+
+    "VMImagePublisher": "MicrosoftWindowsServer",
+    "VMImageOffer": "WindowsServer"
+  },
+    "resources": [
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "name": "[variables('publicIPAddressName')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "PublicIPAddress"
+        },
+        "properties": {
+          "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+          "dnsSettings": {
+            "domainNameLabel": "[variables('DNSNameForPublickIP')]"
+          }
+        }
+      },
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[variables('nicName')]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
+        ],
+        "tags": {
+          "displayName": "NetworkInterface"
+        },
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "publicIPAddress": {
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                },
+                "subnet": {
+                  "id": "[variables('subnetRef')]"
+                }
+              }
+            }
+          ]
+        }
+      },
+
+      {
+        "name": "[variables('VMname')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2015-06-15",
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        ],
+        "tags": {
+          "displayName": "VM"
+        },
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[variables('VMVmSize')]"
+          },
+          "osProfile": {
+            "computerName": "[variables('VMname')]",
+            "adminUsername": "[variables('VMAdminUserName')]",
+            "adminPassword": "[variables('VMAdminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "[variables('VMImagePublisher')]",
+              "offer": "[variables('VMImageOffer')]",
+              "sku": "[variables('VMWindowsOS')]",
+              "version": "latest"
+            },
+            "osDisk": {
+              "name": "[variables('VMname')]",
+              "vhd": {
+                "uri": "[variables('osDiskVhdUri')]"
+              },
+              "caching": "ReadWrite",
+              "createOption": "FromImage"
+            }
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "outputs": {
+    }
+  }

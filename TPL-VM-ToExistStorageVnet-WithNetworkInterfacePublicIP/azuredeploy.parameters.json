@@ -1,0 +1,27 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VMName": {
+            "value": "dfgdgdfgertgb"
+        },
+        "VMAdminUserName": {
+            "value": "roli"
+        },
+        "StorageAccountName": {
+            "value": "test5wsl2pgw2zum6"
+        },
+        "existingVirtualNetworkName": {
+            "value": "Vnet-core"
+        },
+        "existingVirtualNetworkResourceGroup": {
+            "value": "test"
+        },
+        "subnetName": {
+            "value": "main"
+        },
+        "dnsNameForPublicIP": {
+            "value": "testippc"
+        }
+    }
+}
