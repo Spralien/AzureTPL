@@ -8,5 +8,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 <p>
-StorageAccount
+Availability set<br>
+-platformFaultDomainCount<br>
+-platformUpdateDomainCount
 </p>
