@@ -1,4 +1,4 @@
-# Create a VM in a exist StorageAccount and Virtual Network with new network interface and publick ip
+# Create a VM in a exist StorageAccount and Virtual Network with new network interface and public ip
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FSpralien%2FAzureTPL%2Fmaster%2FTPL-VM-ToExistStorageVnet-WithNetworkInterfacePublicIP%2Fazuredeploy.json" target="_blank">
   <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -19,7 +19,7 @@ VM<br>
 </p>
 <p>
 Depends on existing:<br>
--StorageAccount<br>
--VirtualNetwork<br>
---Subnet
+- StorageAccount<br>
+- VirtualNetwork<br>
+-- Subnet
 </p>
