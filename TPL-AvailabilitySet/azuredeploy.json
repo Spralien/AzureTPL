@@ -1,0 +1,45 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AvailabilitySetName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platformFaultDomainCount": {
+      "type": "int",
+      "defaultValue": 2,
+      "maxValue": 3,
+      "minValue": 1
+    },
+    "platformUpdateDomainCount": {
+      "type": "int",
+      "defaultValue": 2,
+      "maxValue": 20,
+      "minValue": 1
+    }
+  },
+  "variables": {
+    "AvailabilitySetName": "[parameters('AvailabilitySetName')]",
+    "platformFaultDomainCount": "[parameters('platformFaultDomainCount')]",
+    "platformUpdateDomainCount": "[parameters('platformUpdateDomainCount')]"
+  },
+    "resources": [
+        {
+            "name": "[variables('AvailabilitySetName')]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "AvailabilitySet"
+            },
+          "properties": {
+            "platformUpdateDomainCount": "[variables('platformUpdateDomainCount')]",
+            "platformFaultDomainCount": "[variables('platformFaultDomainCount')]"
+          }
+        }
+    ],
+    "outputs": {
+    }
+}
