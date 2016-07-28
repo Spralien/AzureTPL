@@ -1,0 +1,65 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "StorageAccountName": {
+      "type": "string",
+      "defaultValue": "standardsa",
+      "maxLength": 11
+    },
+    "StorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "StorageAccountTier": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Standard",
+        "Premium"
+      ]
+    },
+    "StorageAccountKind": {
+      "type": "string",
+      "defaultValue": "Storage",
+      "allowedValues": [
+        "Storage",
+        "BlobStorage"
+      ]
+    }
+  },
+  "variables": {
+    "StorageAccountName": "[concat(parameters('StorageAccountName'),uniquestring(resourceGroup().id))]",
+    "StorageAccountType": "[parameters('StorageAccountType')]",
+    "StorageAccountTier": "[parameters('StorageAccountTier')]",
+    "StorageAccountKind": "[parameters('StorageAccountKind')]"
+
+  },
+    "resources": [
+      {
+        "name": "[variables('StorageAccountName')]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2016-01-01",
+        "tags": {
+          "displayName": "StorageAccount"
+        },
+        "sku": {
+          "name": "[variables('StorageAccountType')]",
+          "tier": "[variables('StorageAccountTier')]"
+        },
+        "kind": "[variables('StorageAccountKind')]",
+        "properties": { },
+        "dependsOn": [ ]
+      }
+    ],
+    "outputs": {
+    }
+}
