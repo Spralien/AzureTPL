@@ -87,7 +87,7 @@
     "VMAdminUserName": "[parameters('VMAdminUserName')]",
     "VMAdminPassword": "[parameters('VMAdminPassword')]",
     "VMVmSize": "[parameters('vmSize')]",
-    "availabilityName": "[parameters('availabilitySetName')",
+    "availabilityName": "[parameters('availabilitySetName')]",
 
     "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
