@@ -28,6 +28,9 @@ $parameters = @{
     "dnsNameForPublicIP" = $dnsNameForPublicIP;
     "availabilitySetName" = $availabilitySet
 }
-Test-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters
-New-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters
+$test = Test-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters -Verbose 
+Write-Host ($test | Format-List | Out-String)
 
+if($test.Count -eq ''){ 
+    New-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters -Verbose
+}
