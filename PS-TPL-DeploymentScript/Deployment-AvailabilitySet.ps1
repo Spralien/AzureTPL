@@ -9,5 +9,9 @@ $platformUpdateDomainCount = 2 # 1 - 20
 
 
 $parameters = @{"AvailabilitySetName"=$nameOfAvailabilitySet; "platformFaultDomainCount" = $platformFaultDomainCount; "platformUpdateDomainCount" = $platformUpdateDomainCount}
-Test-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters
-New-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters
+$test = Test-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters -Verbose 
+Write-Host ($test | Format-List | Out-String)
+
+if($test.Count -eq ''){ 
+    New-AzureRmResourceGroupDeployment -ResourceGroupName $RmResourceGroupName -TemplateFile $TemplatePath -TemplateParameterObject $parameters -Verbose
+}
